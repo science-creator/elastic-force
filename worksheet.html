@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원래 모양으로 되돌아가려는 힘 학습지</title>
+<link rel="stylesheet" href="css/app.css">
+<style>
+  .fig { background:#0f172a; border-radius:12px; padding:10px; margin:14px 0; }
+  .fig svg { width:100%; height:auto; display:block; }
+  .qbox { border-top:2px solid var(--line); padding-top:18px; margin-top:18px; }
+  .qbox:first-of-type { border-top:0; padding-top:0; margin-top:0; }
+  .qno { display:inline-block; background:var(--brand); color:#fff; border-radius:8px;
+         padding:2px 12px; font-size:17px; margin-right:8px; }
+  .qtitle { font-size:21px; font-weight:bold; margin:0 0 12px; }
+  .ox-row { display:flex; gap:12px; }
+  .ox-row .opt { flex:1; text-align:center; font-size:26px; font-weight:bold; }
+  .numwrap { display:flex; align-items:center; gap:12px; }
+  .numwrap input { max-width:220px; }
+  .numwrap .unit { font-size:22px; font-weight:bold; }
+  .ans { margin-top:12px; padding:12px 16px; border-radius:10px; font-size:18px; }
+  .ans.ok { background:var(--ok-bg); border-left:6px solid var(--ok); }
+  .ans.no { background:var(--no-bg); border-left:6px solid var(--no); }
+  .savebar {
+    position:sticky; bottom:0; background:#fff; border-top:2px solid var(--line);
+    padding:14px 18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; z-index:50;
+    margin:0 -18px; box-shadow:0 -4px 14px rgba(0,0,0,.06);
+  }
+  .savebar .grow { flex:1 1 auto; font-size:18px; color:var(--sub); }
+  .scoreband { background:var(--band); border-radius:10px; padding:12px 16px; font-size:21px; font-weight:bold; margin:0 0 16px; }
+  .locked input, .locked textarea, .locked select { background:#f3f4f6; color:var(--sub); }
+
+  @media print {
+    .fig text[fill="#e2e8f0"] { fill:#111 !important; }
+    .fig path[stroke="#cbd5e1"] { stroke:#444 !important; }
+    /* 문항이 22개라 공용값(9pt)에서 조금만 키운다 */
+    html, body { font-size: 9.5pt; line-height: 1.38; }
+    .qtitle { font-size: 9.5pt; }
+    .opt { font-size: 8.5pt; }
+    .ox-row .opt { font-size: 9.5pt; }
+    .numwrap input, .numwrap .unit { font-size: 9.5pt; }
+    textarea {
+      font-size: 9.5pt; line-height: 6.5mm;
+      min-height: 12mm; height: 12.5mm;
+      background: repeating-linear-gradient(#fff 0, #fff 6.5mm, #bbb 6.5mm, #bbb 6.7mm) !important;
+    }
+    table.grid th, table.grid td { font-size: 8pt; }
+    .fig svg { height: 28mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>📝 원래 모양으로 되돌아가려는 힘 학습지</h1>
+  <span class="badge">중학교 1학년 과학 · 힘의 작용</span>
+  <span class="spacer"></span>
+  <a class="home" href="index.html" target="el-lab" data-win>🌀 실험실 열기 ↗</a>
+</div>
+
+<div class="wrap">
+
+  <!-- 🔑 선생님용 정답지 — worksheet.html?key 로 열린다. 평소에는 숨어 있다. -->
+  <div id="keyRoot">
+    <div class="print-only print-head">
+      <h1>원래 모양으로 되돌아가려는 힘 학습지 · 정답지</h1>
+      <p class="sub">중학교 1학년 과학 · 힘의 작용 (4) 원래 모양으로 되돌아가려는 힘 · 선생님용</p>
+    </div>
+    <div class="card no-print keybar">
+      <h2>🔑 정답지</h2>
+      <label><input type="checkbox" id="kQ"> 문제도 함께</label>
+      <label><input type="checkbox" id="kWhy"> 해설도 함께</label>
+      <span class="grow"></span>
+      <a class="btn" href="worksheet.html">← 학생용 학습지</a>
+      <button type="button" class="btn primary" id="kPrint">🖨 인쇄하기</button>
+    </div>
+    <div class="card" id="keySheet"></div>
+  </div>
+
+  <div class="print-only print-head">
+    <h1>원래 모양으로 되돌아가려는 힘 학습지</h1>
+    <p class="sub">중학교 1학년 과학 · 힘의 작용 — (4) 원래 모양으로 되돌아가려는 힘</p>
+    <div class="who">1학년 (　　　)반 　(　　　)번 　이름 (　　　　　　　　)</div>
+  </div>
+
+  <div class="card no-print">
+    <h2>이렇게 하세요</h2>
+    <div class="hint">
+      <b>1</b> 오른쪽 위 <b>🌀 실험실 열기</b>를 눌러 실험실을 <b>새 창</b>으로 띄우고 나란히 놓습니다.<br>
+      <b>2</b> 문제를 <b>먼저 예측해서</b> 쓴 다음, 실험실에서 확인합니다.<br>
+      <b>3</b> 다 쓰면 맨 아래 <b>PDF로 저장하기</b>를 누릅니다.
+    </div>
+    <div class="warnbox"><b>제출은 한 번뿐입니다.</b> PDF를 저장하면 답을 고칠 수 없습니다.</div>
+  </div>
+
+  <div class="scoreband hidden" id="scoreBand"></div>
+  <div class="card" id="sheet"></div>
+
+  <div class="savebar">
+    <span class="grow" id="saveMsg">다 썼으면 PDF로 저장해 제출하세요.</span>
+    <button type="button" class="btn" id="btnAnswers">정답 확인 (PDF 저장 후 열림) 🔒</button>
+    <button type="button" class="btn" id="btnClear">쓴 내용 지우기</button>
+    <button type="button" class="btn primary big" id="btnPdf">PDF로 저장하기</button>
+  </div>
+
+  <div class="card no-print" id="aboutCard">
+    <h2>ℹ️ 개인정보 안내</h2>
+    <p class="lead">
+      학년·반·학번·이름은 <b>PDF를 만드는 순간에만</b> 물어보고 <b>PDF 파일 안에만</b> 들어갑니다.
+    </p>
+  </div>
+
+</div>
+
+<script src="js/pdf.js"></script>
+<script src="js/elastic.js"></script>
+<script>
+/* =========================================================
+   worksheet.html — 학습지 문항 · 자동 채점 · PDF 제출
+   ---------------------------------------------------------
+   문항은 선생님의 종이 학습지
+   「Ⅴ 힘의 작용 / 1. 여러 가지 힘 / (4) 원래 모양으로 되돌아가려는 힘」 4~5쪽
+   의 탐구 · 빈칸 · 물음을 그대로 따라간다.
+   ⚠ 실험표(0.6·1.3·1.9·2.5·3.1·3.6)는 **종이와 같은 값**이다.
+   ========================================================= */
+(function () {
+  "use strict";
+  var K = window.PdfKit;
+  var E = window.Elastic;
+
+  var SHEET = [
+    {
+      step: "1단계 · 탄성과 탄성력",
+      lead: "실험실의 🤏 <b>누르고 당기기</b> 장면을 열어 두고 답하세요. " +
+            "용수철을 눌렀다 당겼다 하며 <b>두 화살표</b>를 살펴봅니다.",
+      figure: true,
+      items: [
+        { type: "choice", q: "<b>탄성</b>이란 무엇일까요?",
+          opts: ["<b>변형된 물체가 원래의 모양으로 돌아가려는 성질</b>",
+                 "물체가 운동하는 것을 방해하는 성질",
+                 "물체가 물에 뜨는 성질"], ans: 0,
+          why: "<b>변형된 물체가 원래의 모양으로 돌아가려는 성질</b>입니다." },
+        { type: "choice", q: "<b>탄성력</b>이란 무엇일까요?",
+          opts: ["변형된 물체가 원래의 모양으로 돌아가려는 <b>성질</b>",
+                 "<b>변형된 물체가 원래의 모양으로 돌아가려는 힘</b>",
+                 "지구가 물체를 당기는 힘"], ans: 1,
+          why: "<b>변형된 물체가 원래의 모양으로 돌아가려는 힘</b>입니다.<br>" +
+               "<em>‘성질’은 탄성, ‘힘’은 탄성력 — 한 글자 차이지만 다른 말이에요.</em>" },
+        { type: "choice", q: "다음 중 <b>탄성체가 아닌</b> 것은?",
+          opts: ["용수철", "고무줄", "<b>유리컵</b>"], ans: 2,
+          why: "<b>유리컵</b>입니다. 탄성체는 <b>탄성이 있는 물체</b>로 " +
+               "용수철·고무줄·장대 같은 것들이에요. 유리컵은 힘을 주면 깨질 뿐 " +
+               "원래 모양으로 돌아가지 않습니다." },
+        { type: "choice", q: "용수철을 양쪽 끝에서 <b>누를 때</b>, 용수철이 손에 주는 힘의 방향은?",
+          opts: ["누르는 방향과 같은 쪽", "<b>누르는 방향과 반대쪽(손을 밀어낸다)</b>", "위쪽"], ans: 1,
+          why: "<b>누르는 방향과 반대쪽</b>입니다. 줄어든 용수철이 다시 <b>늘어나려고</b> " +
+               "손을 밀어냅니다." },
+        { type: "choice", q: "용수철을 <b>세게 누를수록</b> 손에 작용하는 힘의 크기는?",
+          opts: ["<b>커진다</b>", "작아진다", "변하지 않는다"], ans: 0,
+          why: "<b>커집니다.</b> 많이 변형될수록 탄성력이 크니까요." },
+        { type: "choice", q: "이번엔 용수철을 양쪽 끝에서 <b>잡아당길 때</b>, 손에 작용하는 힘의 방향은?",
+          opts: ["당기는 방향과 같은 쪽", "<b>당기는 방향과 반대쪽(손을 끌어당긴다)</b>", "아래쪽"], ans: 1,
+          why: "<b>당기는 방향과 반대쪽</b>입니다. 늘어난 용수철이 다시 <b>줄어들려고</b> 하니까요." },
+        { type: "choice", q: "정리하면, 탄성력은 탄성체에 준 힘과 어떤 방향으로 작용할까요?",
+          opts: ["같은 방향", "<b>반대 방향</b>", "수직인 방향"], ans: 1,
+          why: "<b>반대 방향</b>입니다. 누르든 당기든 마찬가지예요 — " +
+               "<b>원래 모양으로 돌아가려는</b> 쪽이니까요." },
+        { type: "choice", q: "탄성체가 <b>많이 변형될수록</b> 작용하는 탄성력은?",
+          opts: ["<b>크다</b>", "작다", "관계없다"], ans: 0,
+          why: "<b>큽니다.</b> 그리고 언제나 <b>준 힘과 크기가 같습니다.</b>" }
+      ]
+    },
+    {
+      step: "2단계 · 추를 매달면 얼마나 늘어날까",
+      lead: "실험실의 🪝 <b>추를 매달면</b> 장면에서 추를 하나씩 늘려 보세요(미션 4·5). " +
+            "추 한 개는 <b>1 N</b> 입니다.",
+      items: [
+        { type: "tbl", q: "추의 무게에 따라 용수철이 늘어난 길이를 표에 채우세요.",
+          head: ["추의 무게 (N)", "0", "1", "2", "3", "4", "5", "6"],
+          rows: ["늘어난 길이 (cm)"],
+          keyAns: [["0", "0.6", "1.3", "1.9", "2.5", "3.1", "3.6"]] },
+        { type: "choice", q: "추의 개수가 늘어날수록 <b>전체 추의 무게</b>는 어떻게 될까요?",
+          opts: ["<b>커진다</b>", "작아진다", "변하지 않는다"], ans: 0,
+          why: "<b>커집니다.</b> 추 한 개가 1 N 이므로 개수만큼 늘어나요." },
+        { type: "choice", q: "추의 무게와 용수철이 늘어난 길이 사이에는 어떤 관계가 있을까요?",
+          opts: ["<b>비례한다 (무게가 2배면 길이도 약 2배)</b>",
+                 "반비례한다", "아무 관계가 없다"], ans: 0,
+          why: "<b>비례합니다.</b> 학습지의 문장 그대로예요 — " +
+               "<b>용수철은 작용한 힘에 비례하여 일정하게 늘어난다.</b><br>" +
+               "표에서도 2 N 일 때 1.3 cm, 4 N 일 때 2.5 cm 로 약 2배가 됩니다." },
+        { type: "num", q: "추 <b>7개</b>(7 N)를 매달면 용수철은 약 몇 cm 늘어날까요?",
+          unit: "cm", ans: 4.2, tol: 0.4,
+          why: "약 <b>4.2 cm</b> 입니다. 이 용수철은 1 N 마다 약 <b>0.6 cm</b> 씩 늘어나므로 " +
+               "0.6 × 7 = 4.2 cm 예요.<br>" +
+               "<em>표에 없는 값도 <b>비례 관계</b>를 알면 예측할 수 있습니다.</em>" },
+        { type: "choice", q: "이 표를 그래프로 그리면 어떤 모양이 될까요?",
+          opts: ["<b>원점을 지나는 직선</b>", "원", "아무 규칙 없이 흩어진 점들"], ans: 0,
+          why: "<b>원점을 지나는 직선</b>입니다. 추를 매달지 않으면(0 N) 늘어난 길이도 0 이고, " +
+               "그 뒤로는 비례해서 늘어나니까요." },
+        { type: "choice", q: "표를 그래프로 나타낼 때, <b>눈금</b>은 어떻게 매겨야 할까요?",
+          opts: ["<b>눈금 사이의 간격이 일정하고, 표의 값이 모두 들어가게</b>",
+                 "간격은 마음대로 하고 큰 값만 들어가게",
+                 "눈금은 매기지 않아도 된다"], ans: 0,
+          why: "<b>간격이 일정하고 표의 값이 모두 들어가야</b> 합니다. " +
+               "간격이 들쭉날쭉하면 비례 관계가 직선으로 보이지 않아요." }
+      ]
+    },
+    {
+      step: "3단계 · 용수철저울",
+      lead: "실험실의 ⚖️ <b>용수철저울</b> 장면에서 늘어난 길이를 바꿔 보세요(미션 6).",
+      items: [
+        { type: "choice", q: "<b>용수철저울</b>은 무엇을 측정하는 도구일까요?",
+          opts: ["물체의 질량", "<b>물체의 무게 또는 힘</b>", "물체의 부피"], ans: 1,
+          why: "<b>무게 또는 힘</b>입니다. 용수철이 <b>작용한 힘에 비례해서</b> 늘어나는 성질을 " +
+               "이용한 도구예요." },
+        { type: "num", q: "무게가 <b>10 N</b> 인 물체를 매달았을 때 <b>10 cm</b> 늘어나는 용수철이 있습니다. " +
+               "이 용수철에 필통을 매달았더니 <b>5 cm</b> 만큼 늘어났습니다. 필통의 무게는?",
+          unit: "N", ans: 5, tol: 0.2,
+          why: "<b>5 N</b> 입니다. 10 N 에 10 cm 늘어나므로 <b>1 N 마다 1 cm</b> 씩 늘어나요. " +
+               "5 cm 늘어났으니 5 N 입니다." },
+        { type: "num", q: "같은 용수철에 무게 <b>8 N</b> 인 물체를 매달면 몇 cm 늘어날까요?",
+          unit: "cm", ans: 8, tol: 0.3,
+          why: "<b>8 cm</b> 입니다. 1 N 마다 1 cm 씩 늘어나니까요." },
+        { type: "ox", q: "용수철저울로 재는 것은 물체의 <b>질량</b>이다.", ans: false,
+          why: "아닙니다. <b>무게</b>를 잽니다. 질량을 재는 것은 <b>양팔저울</b>이에요.<br>" +
+               "<em>앞 소단원 「물체를 잡아당기는 힘」에서 배운 내용입니다.</em>" },
+        { type: "text", q: "용수철저울이 <b>무게를 잴 수 있는 까닭</b>을 설명해 보세요.",
+          why: "용수철이 <b>작용한 힘(무게)에 비례하여 일정하게 늘어나기</b> 때문입니다.<br>" +
+               "늘어난 길이가 무게에 비례하므로, 거꾸로 <b>늘어난 길이를 재면 무게를 알 수 있습니다.</b>" }
+      ]
+    },
+    {
+      step: "4단계 · 생활 속에서, 그리고 정리",
+      lead: "",
+      items: [
+        { type: "choice", q: "<b>트램펄린</b>에서 사람이 튀어 오르게 하는 힘은 무엇일까요?",
+          opts: ["마찰력", "부력", "<b>탄성력</b>"], ans: 2,
+          why: "<b>탄성력</b>입니다. 눌려 늘어난 트램펄린이 <b>원래 모양으로 돌아가면서</b> " +
+               "사람을 밀어 올려요." },
+        { type: "choice", q: "<b>장대높이뛰기</b>에서 휘어진 장대가 다시 펴지며 선수를 밀어 올립니다. " +
+               "이때 작용한 힘은?",
+          opts: ["<b>탄성력</b>", "중력", "마찰력"], ans: 0,
+          why: "<b>탄성력</b>입니다. 장대도 <b>탄성체</b>예요.<br>" +
+               "<em>번지 점프의 줄, 활시위도 같은 원리입니다.</em>" },
+        { type: "text", q: "이 단원에서 배운 것을 <b>한 문장</b>으로 정리해 보세요.<br>" +
+               "<em>(‘탄성력’과 ‘반대’를 넣어서 써 보면 좋습니다.)</em>",
+          why: "예시 — <b>“탄성력은 변형된 물체가 원래 모양으로 돌아가려는 힘으로, " +
+               "준 힘과 크기가 같고 방향은 반대이며, 많이 변형될수록 크다.”</b>" }
+      ]
+    }
+  ];
+
+  var ctrls = [], submitted = false, lastInfo = null, lastPages = null;
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  /* 누를 때와 당길 때 — 준 힘과 탄성력이 **같은 길이로 반대 방향**.
+     ⚠ 두 화살표의 길이는 반드시 같아야 한다. 이 그림이 주장하는 것이 그것뿐이다. */
+  function springFigure() {
+    var L = 46;
+    function one(cx, label, press) {
+      var cy = 62, half = press ? 42 : 62;
+      var s = "";
+      /* 용수철 */
+      var d = "";
+      for (var i = 0; i <= 60; i++) {
+        var t = i / 60;
+        var x = cx - half + 2 * half * t;
+        var y = cy + Math.sin(t * 6 * Math.PI * 2) * 9;
+        d += (i === 0 ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1);
+      }
+      s += '<path d="' + d + '" fill="none" stroke="#cbd5e1" stroke-width="2"/>';
+      /* 손이 주는 힘 (아래) — 누르면 안쪽, 당기면 바깥쪽 */
+      var dir = press ? 1 : -1;
+      [[cx - half - 6, dir], [cx + half + 6, -dir]].forEach(function (p) {
+        var x0 = p[0], sgn = p[1];
+        s += '<line x1="' + x0 + '" y1="' + (cy + 34) + '" x2="' + (x0 + sgn * L) + '" y2="' + (cy + 34) +
+             '" stroke="#fbbf24" stroke-width="3.5"/>' +
+             '<polygon points="' + (x0 + sgn * (L + 8)) + ',' + (cy + 34) + ' ' + (x0 + sgn * L) + ',' + (cy + 29) +
+             ' ' + (x0 + sgn * L) + ',' + (cy + 39) + '" fill="#fbbf24"/>';
+      });
+      /* 탄성력 (위) — 언제나 반대 */
+      [[cx - half - 6, -dir], [cx + half + 6, dir]].forEach(function (p) {
+        var x0 = p[0], sgn = p[1];
+        s += '<line x1="' + x0 + '" y1="' + (cy - 34) + '" x2="' + (x0 + sgn * L) + '" y2="' + (cy - 34) +
+             '" stroke="#34d399" stroke-width="3.5"/>' +
+             '<polygon points="' + (x0 + sgn * (L + 8)) + ',' + (cy - 34) + ' ' + (x0 + sgn * L) + ',' + (cy - 39) +
+             ' ' + (x0 + sgn * L) + ',' + (cy - 29) + '" fill="#34d399"/>';
+      });
+      s += '<text x="' + cx + '" y="' + (cy + 58) + '" fill="#e2e8f0" font-size="13" ' +
+           'font-weight="bold" text-anchor="middle">' + label + '</text>';
+      return s;
+    }
+    return '<div class="fig"><svg viewBox="0 0 640 145" xmlns="http://www.w3.org/2000/svg">' +
+      one(165, "① 양쪽에서 누른다", true) +
+      one(475, "② 양쪽에서 당긴다", false) +
+      '<text x="320" y="16" fill="#e2e8f0" font-size="12" text-anchor="middle">' +
+      '노란 화살표 = 손이 주는 힘 · 초록 화살표 = 탄성력</text>' +
+      '</svg></div>';
+  }
+
+  function build() {
+    var host = document.getElementById("sheet");
+    host.innerHTML = "";
+    var qno = 0;
+    SHEET.forEach(function (stepDef, si) {
+      host.appendChild(el("h2", null, '<span class="step">' + (si + 1) + '</span>' + stepDef.step));
+      if (stepDef.lead) host.appendChild(el("p", "lead", stepDef.lead));
+      if (stepDef.figure) host.appendChild(el("div", null, springFigure()).firstChild);
+      stepDef.items.forEach(function (it) {
+        qno++;
+        var box = el("div", "qbox");
+        box.appendChild(el("p", "qtitle", '<span class="qno">' + qno + '</span>' + it.q));
+        var c = renderItem(it, box);
+        c.def = it; c.no = qno; c.step = si;
+        c.ansBox = el("div", "ans hidden");
+        box.appendChild(c.ansBox);
+        ctrls.push(c);
+        host.appendChild(box);
+      });
+    });
+    restore();
+  }
+
+  function renderItem(it, box) {
+    if (it.type === "choice" || it.type === "ox") {
+      var opts = it.type === "ox" ? ["O (맞다)", "X (아니다)"] : it.opts;
+      var wrap = el("div", it.type === "ox" ? "opts ox-row" : "opts");
+      wrap.style.display = "flex";
+      wrap.style.flexDirection = it.type === "ox" ? "row" : "column";
+      wrap.style.gap = "8px";
+      var pick = -1, btns = [];
+      opts.forEach(function (t, i) {
+        var b = el("button", "opt", (it.type === "ox" ? "" : "④①②③".charAt(i + 1) + " ") + t);
+        b.type = "button";
+        b.addEventListener("click", function () {
+          if (submitted) { K.toast("제출한 뒤에는 답을 고칠 수 없습니다.", "warn"); return; }
+          pick = i;
+          btns.forEach(function (x, j) { x.classList.toggle("on", j === i); });
+          save();
+        });
+        btns.push(b); wrap.appendChild(b);
+      });
+      box.appendChild(wrap);
+      var right = it.type === "ox" ? (it.ans ? 0 : 1) : it.ans;
+      return {
+        get: function () { return pick; },
+        set: function (v) { pick = v; btns.forEach(function (x, j) { x.classList.toggle("on", j === v); }); },
+        forPdf: function () { return pick < 0 ? "" : stripTags(opts[pick]); },
+        grade: function () { return pick === right; },
+        rightText: function () { return stripTags(opts[right]); },
+        lock: function () { btns.forEach(function (b) { b.disabled = true; }); },
+        markAnswer: function () {
+          btns.forEach(function (b, j) {
+            if (j === right) b.classList.add("right");
+            else if (j === pick) b.classList.add("wrong");
+          });
+        }
+      };
+    }
+
+    if (it.type === "num") {
+      var w = el("div", "numwrap");
+      var inp = el("input"); inp.type = "text"; inp.inputMode = "decimal";
+      inp.placeholder = "숫자만 쓰세요";
+      inp.addEventListener("input", save);
+      w.appendChild(inp); w.appendChild(el("span", "unit", it.unit || ""));
+      box.appendChild(w);
+      return {
+        get: function () { return inp.value; },
+        set: function (v) { inp.value = v || ""; },
+        forPdf: function () { return inp.value ? inp.value + " " + (it.unit || "") : ""; },
+        grade: function () {
+          var v = parseFloat(String(inp.value).replace(/[^0-9.\-]/g, ""));
+          return isFinite(v) && Math.abs(v - it.ans) <= (it.tol || 0.01);
+        },
+        rightText: function () { return it.ans + " " + (it.unit || ""); },
+        lock: function () { inp.disabled = true; }
+      };
+    }
+
+    if (it.type === "text") {
+      var ta = el("textarea");
+      ta.placeholder = "여기에 자기 말로 써 보세요.";
+      ta.addEventListener("input", save);
+      box.appendChild(ta);
+      return {
+        get: function () { return ta.value; },
+        set: function (v) { ta.value = v || ""; },
+        forPdf: function () { return ta.value; },
+        lock: function () { ta.disabled = true; }
+      };
+    }
+
+    if (it.type === "tbl") {
+      var scroll = el("div", "tablescroll");
+      var tb = el("table", "grid");
+      var thead = el("thead"), tr = el("tr");
+      it.head.forEach(function (t) { tr.appendChild(el("th", null, t)); });
+      thead.appendChild(tr); tb.appendChild(thead);
+      var body = el("tbody"), inputs = [];
+      it.rows.forEach(function (rowName) {
+        var r = el("tr");
+        r.appendChild(el("td", "left", "<b>" + rowName + "</b>"));
+        var line = [];
+        for (var ci = 1; ci < it.head.length; ci++) {
+          var td = el("td");
+          var i2 = el("input"); i2.type = "text";
+          i2.addEventListener("input", save);
+          td.appendChild(i2); r.appendChild(td); line.push(i2);
+        }
+        inputs.push(line); body.appendChild(r);
+      });
+      tb.appendChild(body); scroll.appendChild(tb); box.appendChild(scroll);
+      return {
+        get: function () { return inputs.map(function (l) { return l.map(function (i) { return i.value; }); }); },
+        set: function (v) {
+          if (!v) return;
+          v.forEach(function (l, ri) { (l || []).forEach(function (val, ci) { if (inputs[ri] && inputs[ri][ci]) inputs[ri][ci].value = val; }); });
+        },
+        forPdfTable: function () {
+          return [it.head].concat(inputs.map(function (l, ri) {
+            return [it.rows[ri]].concat(l.map(function (i) { return i.value || "-"; }));
+          }));
+        },
+        forPdf: function () { return ""; },
+        lock: function () { inputs.forEach(function (l) { l.forEach(function (i) { i.disabled = true; }); }); }
+      };
+    }
+
+    return { get: function () { return null; }, set: function () {}, forPdf: function () { return ""; }, lock: function () {} };
+  }
+
+  function save() {
+    if (submitted) return;
+    try { sessionStorage.setItem("el_worksheet", JSON.stringify(ctrls.map(function (c) { return c.get(); }))); } catch (e) {}
+  }
+  function restore() {
+    try {
+      var v = JSON.parse(sessionStorage.getItem("el_worksheet") || "null");
+      if (v && v.length === ctrls.length) ctrls.forEach(function (c, i) { c.set(v[i]); });
+    } catch (e) {}
+  }
+
+  function score() {
+    var got = 0, all = 0;
+    ctrls.forEach(function (c) { if (!c.grade) return; all++; if (c.grade()) got++; });
+    return { got: got, all: all };
+  }
+
+  function makePdf(info) {
+    var sc = score();
+    var doc = K.createDoc({
+      title: "원래 모양으로 되돌아가려는 힘 학습지",
+      subtitle: "중학교 1학년 과학 · 힘의 작용 (4) 원래 모양으로 되돌아가려는 힘",
+      meta: { grade: info.grade, cls: info.cls, num: info.num, name: info.name,
+              when: info.when, right: "자동 채점 " + sc.got + " / " + sc.all },
+      footer: "원래 모양으로 되돌아가려는 힘 실험실"
+    });
+    var qi = 0;
+    SHEET.forEach(function (stepDef) {
+      doc.h1(stepDef.step);
+      if (stepDef.lead) doc.p(stripTags(stepDef.lead), { size: 20, lh: 29 });
+      stepDef.items.forEach(function () {
+        var c = ctrls[qi++], it = c.def;
+        doc.h2(c.no + ". " + stripTags(it.q));
+        if (c.forPdfTable) {
+          var rows = c.forPdfTable();
+          doc.table(rows, rows[0].map(function (_, i) { return i === 0 ? 1.6 : 1; }));
+        } else {
+          doc.box(null, c.forPdf(), { minLines: it.type === "text" ? 3 : 1 });
+        }
+        if (c.grade) {
+          var ok = c.grade();
+          doc.mark(ok ? "정답" : "오답 · 정답은 " + c.rightText(), ok);
+        }
+      });
+      doc.gap(6);
+    });
+    doc.pageBreak();
+    doc.h1("정답과 해설");
+    var qj = 0;
+    SHEET.forEach(function (stepDef) {
+      stepDef.items.forEach(function () {
+        var c = ctrls[qj++];
+        if (!c.def.why) return;
+        doc.h2(c.no + ". " + stripTags(c.def.q));
+        doc.p(stripTags(c.def.why), { size: 21, lh: 30, color: "#111827" });
+        doc.gap(4);
+      });
+    });
+    return doc.finish();
+  }
+
+  function stripTags(s) {
+    return String(s || "").replace(/<br\s*\/?>/gi, " ").replace(/&nbsp;/g, " ").replace(/<[^>]+>/g, "");
+  }
+
+  function applyLockState() {
+    document.body.classList.toggle("locked", submitted);
+    document.getElementById("btnClear").classList.toggle("hidden", submitted);
+    document.getElementById("btnPdf").textContent = submitted ? "PDF 다시 받기" : "PDF로 저장하기";
+    document.getElementById("btnAnswers").textContent =
+      submitted ? "정답·해설 모두 보기" : "정답 확인 (PDF 저장 후 열림) 🔒";
+    if (submitted) {
+      var sc = score(), band = document.getElementById("scoreBand");
+      band.classList.remove("hidden");
+      band.textContent = "✅ 제출했습니다 · 자동 채점 " + sc.got + " / " + sc.all +
+                         " (서술·표는 선생님이 읽습니다)";
+      document.getElementById("saveMsg").textContent = "제출이 끝났습니다. 정답과 해설을 확인하세요.";
+      ctrls.forEach(function (c) { if (c.lock) c.lock(); });
+    }
+  }
+
+  function revealAnswers() {
+    ctrls.forEach(function (c) {
+      if (c.markAnswer) c.markAnswer();
+      if (!c.def.why) return;
+      var ok = c.grade ? c.grade() : null;
+      c.ansBox.className = "ans " + (ok === null ? "ok" : (ok ? "ok" : "no"));
+      c.ansBox.innerHTML = (ok === null ? "💡 <b>이렇게 생각해 보세요</b><br>"
+                                        : (ok ? "⭕ <b>정답입니다.</b><br>" : "❌ <b>정답은 「" + c.rightText() + "」 입니다.</b><br>"))
+                           + c.def.why;
+      c.ansBox.classList.remove("hidden");
+    });
+  }
+
+  function bind() {
+    document.getElementById("btnPdf").addEventListener("click", function () {
+      if (submitted) {
+        if (!lastInfo || !lastPages) return;
+        K.downloadBlob(K.buildPdf(lastPages), K.makeFileName("탄성력학습지", lastInfo));
+        K.toast("다시 내려받았습니다.", "ok");
+        return;
+      }
+      if (!confirm("PDF로 저장하면 답을 고칠 수 없고 정답이 열립니다.\n다 썼는지 확인했나요?")) return;
+      K.askStudentInfo({}, function (info) {
+        try {
+          var pages = makePdf(info);
+          lastInfo = info; lastPages = pages;
+          K.downloadBlob(K.buildPdf(pages), K.makeFileName("탄성력학습지", info));
+          submitted = true;
+          try { sessionStorage.removeItem("el_worksheet"); } catch (e) {}
+          applyLockState(); revealAnswers();
+          K.toast("제출했습니다. 정답과 해설이 열렸습니다.", "ok");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (err) {
+          K.toast("PDF를 만들지 못했습니다: " + err.message, "no");
+        }
+      });
+    });
+
+    document.getElementById("btnClear").addEventListener("click", function () {
+      if (submitted) return;
+      if (!confirm("쓴 내용을 모두 지울까요?")) return;
+      ctrls.forEach(function (c) { c.set(c.def.type === "choice" || c.def.type === "ox" ? -1 : ""); });
+      try { sessionStorage.removeItem("el_worksheet"); } catch (e) {}
+    });
+
+    document.getElementById("btnAnswers").addEventListener("click", function () {
+      if (!submitted) { K.toast("정답은 PDF로 저장(제출)한 뒤에 열립니다.", "warn"); return; }
+      revealAnswers();
+      K.toast("정답과 해설을 모두 열었습니다.", "ok");
+    });
+  }
+
+  /* ---------------------------------------------------------
+     🔑 정답지 (선생님용) — worksheet.html?key
+     --------------------------------------------------------- */
+  function keyAnswerHtml(c) {
+    var it = c.def;
+    if (it.type === "tbl") {
+      if (typeof it.keyAns === "string") return it.keyAns;
+      if (!it.keyAns) return "<i>실험실에서 읽은 값</i>";
+      return it.keyAns.map(function (row, ri) {
+        return it.rows[ri] + " — " + row.join(" / ");
+      }).join("<br>");
+    }
+    if (it.type === "text") return "<i>서술형</i> · " + stripTags(it.why || "");
+    return c.rightText ? c.rightText() : "—";
+  }
+
+  function buildKey() {
+    document.body.classList.add("keymode");
+    document.title = "원래 모양으로 되돌아가려는 힘 학습지 정답지";
+    var top = document.querySelector(".top h1");
+    if (top) top.textContent = "🔑 원래 모양으로 되돌아가려는 힘 학습지 — 정답지";
+
+    var host = document.getElementById("keySheet");
+    var cur = -1, list = null;
+    ctrls.forEach(function (c) {
+      if (c.step !== cur) {
+        cur = c.step;
+        host.appendChild(el("div", "kstep", SHEET[cur].step));
+        list = el("div", "klist");
+        host.appendChild(list);
+      }
+      var row = el("div", "krow");
+      row.appendChild(el("span", "kno", String(c.no)));
+      var body = el("div", "kbody");
+      body.appendChild(el("div", "kq", stripTags(c.def.q)));
+      body.appendChild(el("div", "ka", keyAnswerHtml(c)));
+      if (c.def.why && c.def.type !== "text") {
+        body.appendChild(el("div", "kwhy", stripTags(c.def.why)));
+      }
+      row.appendChild(body);
+      list.appendChild(row);
+    });
+
+    function toggle(id, cls) {
+      var box = document.getElementById(id);
+      box.addEventListener("change", function () {
+        document.body.classList.toggle(cls, box.checked);
+      });
+    }
+    toggle("kQ", "showq");
+    toggle("kWhy", "showwhy");
+    document.getElementById("kPrint").addEventListener("click", function () { window.print(); });
+  }
+
+  build(); bind(); applyLockState();
+  if (/(^|[?&])key(=|&|$)/.test(location.search)) buildKey();
+
+  window.ELSheet = {
+    buildKey: buildKey, keyAnswerHtml: keyAnswerHtml,
+    ctrls: ctrls, score: score, makePdf: makePdf, SHEET: SHEET,
+    isSubmitted: function () { return submitted; },
+    forceSubmit: function (info) {
+      var pages = makePdf(info); lastInfo = info; lastPages = pages;
+      submitted = true; applyLockState(); revealAnswers();
+      return pages;
+    }
+  };
+})();
+</script>
+</body>
+</html>

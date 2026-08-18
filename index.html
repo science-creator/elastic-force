@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원래 모양으로 되돌아가려는 힘 실험실</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="top">
+  <h1>🌀 원래 모양으로 되돌아가려는 힘</h1>
+  <span class="badge">중학교 1학년 과학 · 힘의 작용</span>
+  <span class="spacer"></span>
+  <a class="home" href="worksheet.html" target="el-worksheet" data-win>📝 학습지 ↗</a>
+  <a class="home" href="teacher.html">선생님용 ▸</a>
+</div>
+
+<div class="wrap">
+
+  <div class="scenes" id="scenes">
+    <button type="button" class="scene-btn on" data-scene="hand"><span class="em">🤏</span> 누르고 당기기</button>
+    <button type="button" class="scene-btn" data-scene="hang"><span class="em">🪝</span> 추를 매달면</button>
+    <button type="button" class="scene-btn" data-scene="gauge"><span class="em">⚖️</span> 용수철저울</button>
+    <button type="button" class="scene-btn" data-scene="mission"><span class="em">🏆</span> 미션 도전</button>
+  </div>
+
+  <div class="card hidden" id="missionCard">
+    <h2>🏆 미션 도전 <span class="step">깬 미션 <span id="missionScore">0 / 6</span></span></h2>
+    <p class="lead">먼저 <b>예측</b>하고, 실제로 <b>확인</b>하세요. 성공하면 이유가 열립니다.</p>
+    <div class="mission-list" id="missionList"></div>
+    <div class="mission-body hidden" id="missionBody">
+      <h3 id="mTitle"></h3>
+      <p id="mStory"></p>
+      <div class="predict hidden" id="mPredict">
+        <div class="q" id="mQ"></div>
+        <div class="opts" id="mOpts"></div>
+      </div>
+      <div class="predict hidden" id="mGoals"></div>
+      <div class="verdict hidden" id="mVerdict"></div>
+    </div>
+  </div>
+
+  <div class="stage-wrap">
+
+    <div>
+      <div class="playbar">
+        <button type="button" class="btn" id="btnReset">↺ 처음으로</button>
+        <button type="button" class="btn" id="btnRecord">📋 지금 값 기록</button>
+      </div>
+
+      <div class="stage">
+        <canvas id="stage"></canvas>
+        <div class="stage-tip" id="tip"></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>📋 실험 기록 <span class="step">학습지의 표에 옮겨 적기</span></h2>
+        <p class="lead">추를 하나씩 늘리며 <b>📋 지금 값 기록</b>을 누르세요.</p>
+        <div class="tablescroll">
+          <table class="grid">
+            <thead>
+              <tr><th>번호</th><th>용수철</th><th>추</th><th>무게 (N)</th><th>늘어난 길이 (cm)</th></tr>
+            </thead>
+            <tbody id="recBody"></tbody>
+          </table>
+        </div>
+        <p id="recEmpty" class="hint">아직 기록이 없습니다.</p>
+        <div class="btnrow"><button type="button" class="btn" id="btnClearRec">기록 지우기</button></div>
+      </div>
+
+      <div class="card">
+        <h2>🔎 무엇을 보고 있는 걸까?</h2>
+        <div class="hint">
+          <b>탄성</b> — 변형된 물체가 <b>원래의 모양으로 돌아가려는 성질</b><br>
+          <b>탄성력</b> — 변형된 물체가 <b>원래의 모양으로 돌아가려는 힘</b><br>
+          <b>탄성체</b> — 탄성이 있는 물체 (용수철 · 고무줄 · 장대 …)
+        </div>
+        <div class="warnbox">
+          <b>이 앱의 결론은 두 가지입니다.</b><br>
+          ① <b>탄성력은 준 힘과 크기가 같고 방향이 반대입니다.</b>
+          그리고 <b>많이 변형될수록 커집니다.</b> 눌러도 당겨도 마찬가지예요.<br>
+          ② <b>늘어난 길이는 무게에 비례합니다.</b> 그래서 늘어난 길이를 재면
+          거꾸로 <b>무게를 알 수 있습니다</b> — 이것이 <b>용수철저울</b>입니다.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h3 id="gaugeTitle">🤏 두 힘</h3>
+        <p class="sub" id="gaugeSub">준 힘과 탄성력은 크기가 같다</p>
+        <div class="bars">
+          <div class="bar-row total">
+            <div class="bar-name"><span class="dot" style="background:#fbbf24"></span><span id="barName1">준 힘</span></div>
+            <div class="bar-track" id="barA">
+              <div class="bar-fill" style="background:linear-gradient(90deg,#fde68a,#f59e0b)"></div>
+              <div class="bar-val">0</div>
+            </div>
+          </div>
+          <div class="bar-row" id="rowB">
+            <div class="bar-name"><span class="dot" style="background:#34d399"></span><span id="barName2">탄성력</span></div>
+            <div class="bar-track" id="barB">
+              <div class="bar-fill" style="background:linear-gradient(90deg,#a7f3d0,#059669)"></div>
+              <div class="bar-val">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="readouts">
+          <div class="ro"><b id="roName1">준 힘</b><span id="roVal1">-</span><i id="roUnit1"></i></div>
+          <div class="ro"><b id="roName2">탄성력</b><span id="roVal2">-</span><i id="roUnit2"></i></div>
+          <div class="ro"><b id="roName3">변형</b><span id="roVal3">-</span><i id="roUnit3"></i></div>
+          <div class="ro"><b id="roName4">방향</b><span id="roVal4">-</span><i id="roUnit4"></i></div>
+        </div>
+
+        <div class="formula">
+          <div id="fLaw"></div>
+          <div id="fWhy"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 id="graphTitle">📈 무게와 늘어난 길이</h3>
+        <p class="sub" id="graphSub">원점을 지나는 직선 — 비례</p>
+        <canvas class="graph" id="graph"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3>🎛️ 조작</h3>
+
+        <div class="ctl" data-for="hand mission" data-need="hand">
+          <label>손으로 주는 힘 <span id="valHand">0.0 N</span></label>
+          <input type="range" id="rngHand" min="0" max="6" step="0.1" value="0">
+        </div>
+
+        <div class="ctl" data-for="hand mission" data-need="way">
+          <label>어떻게 할까? <span></span></label>
+          <div class="chips" id="chipWay">
+            <button type="button" class="chip on" data-val="press">🤏 양쪽에서 누른다</button>
+            <button type="button" class="chip" data-val="pull">↔️ 양쪽에서 당긴다</button>
+          </div>
+        </div>
+
+        <div class="ctl" data-for="hang mission" data-need="pieces">
+          <label>매단 추 <span id="valPieces">0 개</span></label>
+          <input type="range" id="rngPieces" min="0" max="8" step="1" value="0">
+        </div>
+
+        <div class="ctl" data-for="hang gauge mission" data-need="spring">
+          <label>용수철 <span></span></label>
+          <div class="chips" id="chipSpring">
+            <button type="button" class="chip on" data-val="paper">🌀 학습지 (0.6 cm/N)</button>
+            <button type="button" class="chip" data-val="soft">〰️ 무른 (1 cm/N)</button>
+            <button type="button" class="chip" data-val="stiff">➰ 뻣뻣한 (0.3 cm/N)</button>
+          </div>
+        </div>
+
+        <div class="ctl" data-for="gauge mission" data-need="stretch">
+          <label>용수철이 늘어난 길이 <span id="valStretch">0.0 cm</span></label>
+          <input type="range" id="rngStretch" min="0" max="10" step="0.5" value="0">
+        </div>
+
+        <div class="hint" style="font-size:16px;margin-top:16px">
+          <b>탄성체</b>는 용수철만이 아닙니다 — 고무줄, 장대높이뛰기의 장대,
+          트램펄린, 번지 점프의 줄도 모두 탄성체예요.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /stage-wrap -->
+
+  <div class="card">
+    <h2>📚 이 실험은 무엇과 이어질까</h2>
+    <div class="tablescroll">
+      <table class="grid">
+        <tr><th>소단원</th><th>학습 목표</th><th>여기서 하는 일</th></tr>
+        <tr><td>(4) 원래 모양으로 되돌아가려는 힘</td>
+            <td class="left">탄성력의 크기와 방향을 설명할 수 있다</td>
+            <td class="left">🤏 누르고 당기기 · 🪝 추를 매달면 · ⚖️ 용수철저울</td></tr>
+        <tr><td>(3) 물체를 잡아당기는 힘</td>
+            <td class="left">중력의 크기와 방향 <em>(앞 소단원)</em></td>
+            <td class="left">잡아당기는 힘 실험실 <em>(다른 앱)</em></td></tr>
+        <tr><td>(5) 물체의 운동을 방해하는 힘</td>
+            <td class="left">마찰력의 크기와 방향 <em>(다음 소단원)</em></td>
+            <td class="left">운동을 방해하는 힘 실험실 <em>(다른 앱)</em></td></tr>
+      </table>
+    </div>
+    <div class="hint">
+      앞 소단원에서 만든 <b>용수철저울</b>이 왜 무게를 잴 수 있는지, 그 까닭이 여기에 있습니다 —
+      <b>늘어난 길이가 무게에 비례</b>하기 때문이에요.
+    </div>
+  </div>
+
+</div>
+
+<script src="js/pdf.js"></script>
+<script src="js/elastic.js"></script>
+<script src="js/lab.js"></script>
+</body>
+</html>
