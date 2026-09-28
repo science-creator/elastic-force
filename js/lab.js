@@ -61,7 +61,7 @@
              "어느 쪽을 향할까?",
       scene: "hand", setup: { hand: 0, way: "press" }, allow: ["hand", "way"],
       predict: { q: "누를 때 손에 작용하는 탄성력의 방향은?",
-                 opts: ["누르는 방향과 같은 쪽", "<b>누르는 방향과 반대쪽(손을 밀어낸다)</b>",
+                 opts: ["누르는 방향과 같은 쪽", "누르는 방향과 반대쪽(손을 밀어낸다)",
                         "위쪽"], ans: 1 },
       goals: [{ key: "pressed", text: "용수철을 <b>눌러</b> 두 화살표 확인하기" }],
       why: "<b>누르는 방향과 반대쪽</b>입니다. 손을 <b>밀어내는</b> 쪽이에요.<br>" +
@@ -75,7 +75,7 @@
              "서로 다른 <b>두 세기</b>로 해 보자.",
       scene: "hand", setup: { hand: 0, way: "press" }, allow: ["hand", "way"],
       predict: { q: "세게 누를수록 손에 작용하는 힘은?",
-                 opts: ["<b>커진다</b>", "작아진다", "변하지 않는다"], ans: 0 },
+                 opts: ["커진다", "작아진다", "변하지 않는다"], ans: 0 },
       goals: [{ key: "twoHands", text: "서로 <b>다른 두 세기</b>로 힘을 줘 보기" }],
       why: "<b>커집니다.</b> 학습지의 문장 그대로예요 — " +
            "<b>탄성체가 많이 변형될수록 작용하는 탄성력이 크다.</b><br>" +
@@ -87,7 +87,7 @@
       story: "이번엔 용수철을 양쪽에서 <b>잡아당겨</b> 보자. 탄성력의 방향은 어떻게 될까?",
       scene: "hand", setup: { hand: 2, way: "press" }, allow: ["hand", "way"],
       predict: { q: "당길 때 손에 작용하는 탄성력의 방향은?",
-                 opts: ["당기는 방향과 같은 쪽", "<b>당기는 방향과 반대쪽(손을 끌어당긴다)</b>",
+                 opts: ["당기는 방향과 같은 쪽", "당기는 방향과 반대쪽(손을 끌어당긴다)",
                         "아래쪽"], ans: 1 },
       goals: [{ key: "pulled", text: "<b>↔️ 양쪽에서 당긴다</b> 로 바꿔 확인하기" }],
       why: "<b>당기는 방향과 반대쪽</b>입니다. 손을 <b>끌어당기는</b> 쪽이에요.<br>" +
@@ -100,7 +100,7 @@
              "늘어난 길이는 어떻게 될까?",
       scene: "hang", setup: { pieces: 0, spring: "paper" }, allow: ["pieces", "spring"],
       predict: { q: "추를 2배로 하면 늘어난 길이는?",
-                 opts: ["<b>약 2배가 된다</b>", "그대로다", "약 절반이 된다"], ans: 0 },
+                 opts: ["약 2배가 된다", "그대로다", "약 절반이 된다"], ans: 0 },
       goals: [{ key: "piece4", text: "추를 <b>4개</b>까지 매달아 보기" }],
       why: "<b>약 2배가 됩니다.</b> 학습지의 표 그대로예요 — " +
            "추 2개 <b>1.3 cm</b> → 추 4개 <b>2.5 cm</b>.<br>" +
@@ -112,7 +112,7 @@
              "먼저 예측하고 확인해 보자.",
       scene: "hang", setup: { pieces: 0, spring: "paper" }, allow: ["pieces", "spring"],
       predict: { q: "추 7개(7 N)를 매달면 늘어난 길이는?",
-                 opts: ["약 3.6 cm", "<b>약 4.2 cm</b>", "약 7 cm"], ans: 1 },
+                 opts: ["약 3.6 cm", "약 4.2 cm", "약 7 cm"], ans: 1 },
       goals: [{ key: "piece7", text: "추를 <b>7개</b>로 맞춰 확인하기" }],
       why: "약 <b>4.2 cm</b> 입니다.<br>" +
            "이 용수철은 1 N 마다 약 <b>0.6 cm</b> 씩 늘어나므로 0.6 × 7 = 4.2 cm 예요.<br>" +
@@ -125,7 +125,7 @@
              "이 용수철에 필통을 매달았더니 <b>5 cm</b> 늘어났다. 필통의 무게는?",
       scene: "gauge", setup: { spring: "paper", stretch: 0 }, allow: ["spring", "stretch"],
       predict: { q: "필통의 무게는?",
-                 opts: ["2.5 N", "<b>5 N</b>", "10 N"], ans: 1 },
+                 opts: ["2.5 N", "5 N", "10 N"], ans: 1 },
       goals: [
         { key: "springSoft", text: "<b>〰️ 무른 용수철</b>(10 N 에 10 cm)로 바꾸기" },
         { key: "stretch5",   text: "늘어난 길이를 <b>5 cm</b> 로 맞추기" }
@@ -663,7 +663,9 @@
       var opts = $("mOpts"); opts.innerHTML = "";
       M.predict.opts.forEach(function (t, i) {
         var b = document.createElement("button");
-        b.type = "button"; b.className = "opt"; b.innerHTML = t;
+        b.type = "button"; b.className = "opt";
+        /* 예측 보기에는 굵은 글씨를 쓰지 않는다 — 정답만 굵으면 답이 드러난다(2026-09-28). */
+        b.innerHTML = String(t).replace(/<\/?b>/g, "");
         b.addEventListener("click", function () {
           S.predictPick = i; S.missionState = "ready"; renderMissionBody();
         });
